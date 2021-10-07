@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Cart = (props) => {
+
     // const total = props.cart.reduce((previous, current) => previous + current.price, 0)
     // we can implement this code via reduce also but for better understanding in begainer level we go through for
     let totalQuantity = 0;
@@ -31,6 +32,7 @@ const Cart = (props) => {
             <p>Shiping: ${shipping}</p>
             <p>Tax: ${tax.toFixed(2)}</p>
             <p>GrandTotal: ${grandTotal.toFixed(2)}</p>
+            {props.children}
         </div>
     );
 };
