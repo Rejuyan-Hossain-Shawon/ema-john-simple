@@ -9,7 +9,7 @@ const Shop = () => {
     // product state
     const [products, setProducts] = useState([]);
     useEffect(() => {
-        fetch("./products.JSON")
+        fetch("./products.json")
             .then(res => res.json())
             .then(data => {
                 setProducts(data);
@@ -44,7 +44,22 @@ const Shop = () => {
     const [cart, setCart] = useState([]);
 
     const handleAddToCart = (product) => {
-        const newCart = [...cart, product];
+        const exist = cart.find(pd => pd.key === product.key)
+        let newCart = [];
+        if (exist) {
+            const rest = cart.filter(pd => pd.key !== product.key)
+            //    we increasing the exist variable because it is the reference of the that product which we passed by parameter
+            exist.quantity = exist.quantity + 1;
+            newCart = [...rest, exist];
+
+        }
+        else {
+            product.quantity = 1;
+            newCart = [...cart, product];
+
+        }
+
+
         setCart(newCart);
         addToDb(product.key);
     }
