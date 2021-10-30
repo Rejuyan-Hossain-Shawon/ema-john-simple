@@ -8,14 +8,20 @@ import "./Shop.css"
 const Shop = () => {
     // product state
     const [products, setProducts] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [page, setPage] = useState(0);
+    const size = 10;
     useEffect(() => {
-        fetch("./products.json")
+        fetch(`http://localhost:5000/products?page=${page}&&size=${size}`)
             .then(res => res.json())
             .then(data => {
-                setProducts(data);
-                setDisplayProducts(data);
+                setProducts(data.products);
+                setDisplayProducts(data.products);
+                const count = data.count;
+                const pageNumber = Math.ceil(count / size);
+                setPageCount(pageNumber);
             })
-    }, [])
+    }, [page])
 
 
     // get saved cart
@@ -76,10 +82,20 @@ const Shop = () => {
             </div>
             <div className="shop-container">
                 <div className="product-conatiner">
-                    <h3>Products:{products.length}</h3>
+
                     {
                         displayProducts.map(product => <Product handleAddToCart={handleAddToCart} key={product.key} product={product}></Product>)
                     }
+
+                    <div className="pagination">
+                        {
+                            [...Array(pageCount).keys()].map(number => <button
+                                className={number === page ? "selected" : ""}
+                                key={number}
+                                onClick={() => setPage(number)}
+                            >{number + 1}</button>)
+                        }
+                    </div>
                 </div>
                 <div className="cart-container">
                     <Cart cart={cart}>
