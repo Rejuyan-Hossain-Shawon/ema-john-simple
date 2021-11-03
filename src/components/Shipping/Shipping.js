@@ -1,13 +1,34 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
+import { clearTheCart, getStoredCart } from '../../utilities/fakedb';
 import "./Shipping.css"
 
 const Shipping = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, reset, handleSubmit, formState: { errors } } = useForm();
     const { user } = useAuth();
     const onSubmit = data => {
-        console.log(data);
+        const savedCart = getStoredCart();
+        data.order = savedCart;
+        // http://localhost:5000/orders
+        // https://evil-treat-41252.herokuapp.com/orders
+        fetch("https://evil-treat-41252.herokuapp.com/orders", {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.insertedId) {
+                    alert("Order Processed Successfully");
+                    clearTheCart();
+                    reset();
+
+                }
+            })
     };
 
     return (

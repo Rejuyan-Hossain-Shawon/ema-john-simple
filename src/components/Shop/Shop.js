@@ -12,7 +12,7 @@ const Shop = () => {
     const [page, setPage] = useState(0);
     const size = 10;
     useEffect(() => {
-        fetch(`http://localhost:5000/products?page=${page}&&size=${size}`)
+        fetch(`https://evil-treat-41252.herokuapp.com/products?page=${page}&&size=${size}`)
             .then(res => res.json())
             .then(data => {
                 setProducts(data.products);
